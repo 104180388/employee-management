@@ -1,0 +1,123 @@
+<app-navbar></app-navbar>
+
+<h2>Employee List</h2>
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Họ tên</th>
+      <th>Ngày sinh</th>
+      <th>Địa chỉ</th>
+      <th>SĐT</th>
+      <th>Ngôn ngữ</th>
+      <th>Chứng chỉ</th>
+      <th>Sửa/Xóa</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (e of employees; track e.id) {
+      <tr>
+        <td>{{ e.id }}</td>
+        <td>{{ e.name }}</td>
+        <td>{{ e.dob }}</td>
+        <td>{{ e.address }}</td>
+        <td>{{ e.phone }}</td>
+        <td>
+          @for (el of e.languages; track el.id) {
+            {{ el.language.name }} ({{ el.language.level }})<br>
+          }
+        </td>
+        <td>
+          @for (ec of e.certificates; track ec.id) {
+            {{ ec.certificate.name }}<br>
+          }
+        </td>
+        <td>
+          <button type="button" (click)="openEditModal(e)">Sửa</button>
+          <button type="button" (click)="deleteEmployee(e.id)">Xóa</button>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+<br>
+
+<button type="button" (click)="openAddModal()">Thêm nhân viên</button>
+
+
+<!-- Edit Modal -->
+@if (showEditModal) {
+  <div class="modal-overlay" (click)="closeEditModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>{{ isEditMode ? 'Chỉnh sửa nhân viên' : 'Thêm nhân viên mới' }}</h3>
+        <button type="button" class="close-btn" (click)="closeEditModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="saveEmployee()">
+          <div class="form-group">
+            <label>Họ tên:</label>
+            <input type="text" [(ngModel)]="editingEmployee.name" name="name" required>
+          </div>
+
+          <div class="form-group">
+            <label>Ngày sinh:</label>
+            <input type="date" [(ngModel)]="editingEmployee.dob" name="dob" required>
+          </div>
+
+          <div class="form-group">
+            <label>Địa chỉ:</label>
+            <input type="text" [(ngModel)]="editingEmployee.address" name="address">
+          </div>
+
+          <div class="form-group">
+            <label>SĐT:</label>
+            <input type="text" [(ngModel)]="editingEmployee.phone" name="phone"
+                   (blur)="validatePhone()"
+                   (input)="validatePhone()"
+                   maxlength="10"
+                   required>
+            @if (phoneError) {
+              <span class="error-message">{{ phoneError }}</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label>Ngôn ngữ:</label>
+            <div class="checkbox-group">
+              @for (lang of languages; track lang.id) {
+                <label class="checkbox-label">
+                  <input type="checkbox"
+                         [checked]="isLanguageSelected(lang.id)"
+                         (change)="toggleLanguage(lang.id)">
+                  {{ lang.name }}
+                </label>
+              }
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Chứng chỉ:</label>
+            <div class="checkbox-group">
+              @for (cert of certificates; track cert.id) {
+                <label class="checkbox-label">
+                  <input type="checkbox"
+                         [checked]="isCertificateSelected(cert.id)"
+                         (change)="toggleCertificate(cert.id)">
+                  {{ cert.name }}
+                </label>
+              }
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" (click)="closeEditModal()">Hủy</button>
+            <button type="submit">{{ isEditMode ? 'Cập nhật' : 'Thêm mới' }}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+}

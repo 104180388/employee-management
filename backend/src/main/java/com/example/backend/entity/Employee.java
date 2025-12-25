@@ -1,8 +1,6 @@
 package com.example.backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -24,11 +22,9 @@ public class Employee {
     private String address;
     private String phone;
 
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<EmployeeLanguage> languages;
 
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<EmployeeCertificate> certificates;
 }

@@ -20,7 +20,7 @@ public class EmployeeLanguageService {
     private final EmployeeRepository employeeRepository;
     private final LanguageRepository languageRepository;
 
-    // GÁN LANGUAGE CHO EMPLOYEE
+    // GÁN LANGUAGE CHO EMPLOYEEs
     public EmployeeLanguage assignLanguage(Long employeeId, Long languageId) {
 
         Employee employee = employeeRepository.findById(employeeId)

@@ -1,0 +1,17 @@
+<app-navbar></app-navbar>
+
+<h2>Certificate List</h2>
+
+<table border="1">
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+  </tr>
+
+  @for (c of certificates; track c.id) {
+    <tr>
+      <td>{{ c.id }}</td>
+      <td>{{ c.name }}</td>
+    </tr>
+  }
+</table>
